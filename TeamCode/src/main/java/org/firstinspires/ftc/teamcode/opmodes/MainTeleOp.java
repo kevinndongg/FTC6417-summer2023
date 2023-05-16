@@ -58,13 +58,35 @@ public class MainTeleOp extends LinearOpMode {
         Gamepad lastGamepad1 = new Gamepad();
         Gamepad lastGamepad2 = new Gamepad();
         initStates();
-
+        boolean grabbing = false;
 
         while(opModeIsActive()) {
             setNumOfGamepads();
 
             if(gamepad1.a && !lastGamepad1.a) {
                 slideState = SLIDESTATE.zero;
+            }
+            if(gamepad1.b && !lastGamepad1.b) {
+                slideState = SLIDESTATE.low;
+            }
+            if(gamepad1.x && !lastGamepad1.x) {
+                slideState = SLIDESTATE.medium;
+            }
+            if(gamepad1.y && !lastGamepad1.y) {
+                slideState = SLIDESTATE.high;
+            }
+            if(gamepad1.left_stick_button && !lastGamepad1.left_stick_button) {
+                slideState = SLIDESTATE.coneright;
+                elbowState = ELBOWSTATE.coneright;
+            }
+            if(gamepad1.left_trigger > 0.1) {
+                turretState = TURRETSTATE.left;
+            }
+            if(gamepad1.right_trigger > 0.1) {
+                turretState = TURRETSTATE.right;
+            }
+            if(gamepad1.left_bumper && !lastGamepad1.left_bumper) {
+                grabbing = !grabbing;
             }
 
             setLastGamepads(lastGamepad1, lastGamepad2);
