@@ -3,6 +3,22 @@ package org.firstinspires.ftc.teamcode.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+
+/*
+Controls:
+
+release everything: retracted state
+a : release cone/intake
+b : low height
+x : medium height
+y : high height
+right trigger (hold) : turret to the right
+left trigger (hold) : turret to the left
+left joystick : strafe (field centric)
+right joystick : turn
+left joystick (press) : cone righting + snail drive
+
+ */
 public class MainTeleOp extends LinearOpMode {
     enum SLIDESTATE {
         zero,
@@ -19,7 +35,7 @@ public class MainTeleOp extends LinearOpMode {
         left,
     }
 
-    enum FOREARMSTATE {
+    enum ELBOWSTATE {
         down,
         up,
         coneright
@@ -27,20 +43,31 @@ public class MainTeleOp extends LinearOpMode {
 
     enum WRISTSTATE {
         counterClockWise,
-        clockWise
+        clockWise,
+        straight
     }
+
+    SLIDESTATE slideState;
+    TURRETSTATE turretState;
+    ELBOWSTATE elbowState;
+    WRISTSTATE wristState;
 
     int numOfGamepads = 1;
     @Override
     public void runOpMode() throws InterruptedException {
-        Gamepad lastG1 = new Gamepad();
-        Gamepad lastG2 = new Gamepad();
+        Gamepad lastGamepad1 = new Gamepad();
+        Gamepad lastGamepad2 = new Gamepad();
+        initStates();
 
 
         while(opModeIsActive()) {
             setNumOfGamepads();
 
-            setLastGamepads(lastG1, lastG2);
+            if(gamepad1.a && !lastGamepad1.a) {
+                slideState = SLIDESTATE.zero;
+            }
+
+            setLastGamepads(lastGamepad1, lastGamepad2);
         }
     }
 
@@ -55,5 +82,12 @@ public class MainTeleOp extends LinearOpMode {
         } else {
             numOfGamepads = 2;
         }
+    }
+
+    public void initStates() {
+        slideState = SLIDESTATE.zero;
+        turretState = TURRETSTATE.center;
+        elbowState = ELBOWSTATE.up;
+        wristState = WRISTSTATE.straight;
     }
 }
