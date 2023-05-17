@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 /*
@@ -38,12 +39,12 @@ public class MainTeleOp extends LinearOpMode {
     enum ELBOWSTATE {
         down,
         up,
-        coneright
+        coneRight
     }
 
     enum WRISTSTATE {
-        counterClockWise,
-        clockWise,
+        counterClockwise,
+        clockwise,
         straight
     }
 
@@ -60,9 +61,14 @@ public class MainTeleOp extends LinearOpMode {
         initStates();
         boolean grabbing = false;
 
+        waitForStart();
+
+        ElapsedTime totalTimer = new ElapsedTime();
+
         while(opModeIsActive()) {
             setNumOfGamepads();
 
+            // slider control
             if(gamepad1.a && !lastGamepad1.a) {
                 slideState = SLIDESTATE.zero;
             }
@@ -75,19 +81,76 @@ public class MainTeleOp extends LinearOpMode {
             if(gamepad1.y && !lastGamepad1.y) {
                 slideState = SLIDESTATE.high;
             }
+            // cone righting
             if(gamepad1.left_stick_button && !lastGamepad1.left_stick_button) {
                 slideState = SLIDESTATE.coneright;
-                elbowState = ELBOWSTATE.coneright;
+                elbowState = ELBOWSTATE.coneRight;
             }
+            // turret control
             if(gamepad1.left_trigger > 0.1) {
                 turretState = TURRETSTATE.left;
-            }
-            if(gamepad1.right_trigger > 0.1) {
+            } else if(gamepad1.right_trigger > 0.1) {
                 turretState = TURRETSTATE.right;
+            } else {
+                turretState = TURRETSTATE.center;
             }
             if(gamepad1.left_bumper && !lastGamepad1.left_bumper) {
                 grabbing = !grabbing;
             }
+
+            /*
+            switch (slideState) {
+                case zero:
+                    robot.autoSlide(0);
+                    break;
+                case low:
+                    robot.autoSldie(Constants.slideLowPos);
+                    break;
+                case medium:
+                    robot.autoSlide(Constants.slideMedPos);
+                    break;
+                case high:
+                    robot.autoSlide(Constants.slideHighPos);
+                    break;
+            }
+
+
+             */
+            /*switch (elbowState) {
+                case up:
+                    robot.autoElbow(Constants.elbowUpPos);
+                    break;
+                case down:
+                    robot.autoElbow(Constants.elbowDownPos);
+                    break;
+                case coneRight:
+                    robot.autoElbow(Constants.elbowConeRightpos);
+                    break;
+            }*/
+
+            /*switch(wristState) {
+                case straight:
+                    robot.autoWrist(Constants.wristStraightPos);
+                    break;
+                case clockwise:
+                    robot.autoWrist(Constants.wristClockwisePos);
+                    break;
+                case counterClockwise:
+                    robot.autoWrist(Constants.wristCounterClockwisePos);
+                    break;
+            }*/
+
+            /*switch(turretState) {
+                case center:
+                    robot.autoTurret(Constants.turretCenterPos);
+                    break;
+                case left:
+                    robot.autoTurret(Constants.turretLeftPos);
+                    break;
+                case right:
+                    robot.autoTurret(Constants.turretRightPos);
+                    break;
+            }*/
 
             setLastGamepads(lastGamepad1, lastGamepad2);
         }
