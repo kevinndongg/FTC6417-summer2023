@@ -8,12 +8,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Hardware6417 {
     DcMotorEx slider, auxSlider, frontLeft, frontRight, backLeft, backRight;
-    Servo turret, elbow, wrist, grabber, parallelRetract;
+    Servo turret, wrist, twister, grabber, parallelRetract;
 
     public Hardware6417(HardwareMap hwMap) {
         initSlides(hwMap);
         initIntake(hwMap);
-        initRetract(hwMap);
+        // initRetract(hwMap);
     }
 
     public void initSlides(HardwareMap hwMap) {
@@ -27,6 +27,9 @@ public class Hardware6417 {
         slider.setPower(0);
         auxSlider.setPower(0);
 
+        slider.setTargetPosition(0);
+        auxSlider.setTargetPosition(0);
+
         //set brake behavior
         slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         auxSlider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -38,29 +41,29 @@ public class Hardware6417 {
     public void initIntake(HardwareMap hwMap) {
         turret      = hwMap.get(Servo.class, "Turret");
         grabber     = hwMap.get(Servo.class, "Grabber");
-        wrist       = hwMap.get(Servo.class, "Wrist");
-        // elbow      = hwMap.get(Servo.class, "Elbow");
+        twister = hwMap.get(Servo.class, "Twister");
+        wrist      = hwMap.get(Servo.class, "Wrist");
     }
 
-    public void initRetract(HardwareMap hwMap) {
+    /*public void initRetract(HardwareMap hwMap) {
         parallelRetract = hwMap.get(Servo.class, "ParallelRetractor");
     }
-
+*/
     public void autoTurret(double position) {
         if(turret.getPosition() != position) {
             turret.setPosition(position);
         }
     }
 
-    public void autoWrist(double position) {
-        if(wrist.getPosition() != position) {
-            wrist.setPosition(position);
+    public void autoTwister(double position) {
+        if(twister.getPosition() != position) {
+            twister.setPosition(position);
         }
     }
 
-    public void autoElbow(double position) {
-        if(elbow.getPosition() != position) {
-            elbow.setPosition(position);
+    public void autoWrist(double position) {
+        if(wrist.getPosition() != position) {
+            wrist.setPosition(position);
         }
     }
 

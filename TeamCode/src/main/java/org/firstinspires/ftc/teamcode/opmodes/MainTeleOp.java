@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -23,6 +24,7 @@ right joystick : turn
 left joystick (press) : cone righting + snail drive
 
  */
+@TeleOp(name = "Main TeleOp", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode {
     Hardware6417 robot;
     enum SLIDESTATE {
@@ -33,29 +35,32 @@ public class MainTeleOp extends LinearOpMode {
         coneright,
         manual
     }
-
     enum TURRETSTATE {
         center,
         right,
         left,
     }
-
-    enum ELBOWSTATE {
+    enum WRISTSTATE {
         down,
         up,
         coneRight
     }
-
-    enum WRISTSTATE {
+    enum TWISTERSTATE {
         counterClockwise,
         clockwise,
         straight
     }
+    enum ROBOTSTATE{
+        intake,
+        maneuvering,
+        outtake,
+        coneRight
+    }
 
     SLIDESTATE slideState;
     TURRETSTATE turretState;
-    ELBOWSTATE elbowState;
     WRISTSTATE wristState;
+    TWISTERSTATE twisterState;
 
     int numOfGamepads = 1;
     @Override
@@ -67,17 +72,17 @@ public class MainTeleOp extends LinearOpMode {
 
         boolean grabbing = false;
         int dunk = 0;
+
         double slideZeroTime = -100;
         double timeSinceSlideZero;
-
         double turnTurretTime = -100;
         double timeSinceTurretTurn;
-
         double grabTime = -100;
         double timeSinceGrab;
 
         waitForStart();
 
+        // robot.retractOdo();
         ElapsedTime totalTimer = new ElapsedTime();
 
         while(opModeIsActive()) {
@@ -87,15 +92,17 @@ public class MainTeleOp extends LinearOpMode {
             timeSinceGrab = totalTimer.seconds() - grabTime;
 
             // slider control
-            if(gamepad1.a && !lastGamepad1.a) {
+            if(gamepad1.a) {
                 slideState = SLIDESTATE.zero;
                 turretState = TURRETSTATE.center;
 
                 if(robot.getSliderPosition() < Constants.sliderIntakeDelta) {
-                    elbowState = ELBOWSTATE.down;
+                    wristState = WRISTSTATE.down;
                     grabbing = false;
                 }
-                slideZeroTime = totalTimer.seconds();
+                if(!lastGamepad1.a) {
+                    slideZeroTime = totalTimer.seconds();
+                }
             }
             if(lastGamepad1.a && !gamepad1.a) {
                 grabbing = true;
@@ -120,7 +127,7 @@ public class MainTeleOp extends LinearOpMode {
             // cone righting
             if(gamepad1.left_stick_button && !lastGamepad1.left_stick_button) {
                 slideState = SLIDESTATE.coneright;
-                elbowState = ELBOWSTATE.coneRight;
+                wristState = WRISTSTATE.coneRight;
             }
 
             // turret control
@@ -147,39 +154,39 @@ public class MainTeleOp extends LinearOpMode {
                         robot.autoSlide(0, Constants.slideBasePower);
                     }
                     if(timeSinceGrab > 1 && timeSinceGrab < 1.2) {
-                        elbowState = ELBOWSTATE.up;
+                        wristState = WRISTSTATE.up;
                     }
                     break;
                 case low:
                     robot.autoSlide(Constants.sliderLowPos - dunk, Constants.slideLowPower);
                     if(timeSinceTurretTurn > 0.7 && timeSinceTurretTurn < 1) {
-                        elbowState = ELBOWSTATE.down;
+                        wristState = WRISTSTATE.down;
                     }
                     break;
                 case medium:
                     robot.autoSlide(Constants.sliderMedPos, Constants.slideMedPower);
                     if(timeSinceTurretTurn > 0.7 && timeSinceTurretTurn < 1) {
-                        elbowState = ELBOWSTATE.down;
+                        wristState = WRISTSTATE.down;
                     }
                     break;
                 case high:
                     robot.autoSlide(Constants.sliderHighPos, Constants.slideHighPower);
                     if(timeSinceTurretTurn > 0.7 && timeSinceTurretTurn < 1) {
-                        elbowState = ELBOWSTATE.down;
+                        wristState = WRISTSTATE.down;
                     }
                     break;
             }
 
 
-            switch (elbowState) {
+            switch (wristState) {
                 case up:
-                    robot.autoElbow(Constants.elbowUpPos);
+                    robot.autoWrist(Constants.elbowUpPos);
                     break;
                 case down:
-                    robot.autoElbow(Constants.elbowDownPos);
+                    robot.autoWrist(Constants.elbowDownPos);
                     break;
                 case coneRight:
-                    robot.autoElbow(Constants.elbowConeRightPos);
+                    robot.autoWrist(Constants.elbowConeRightPos);
                     break;
             }
 
@@ -233,7 +240,7 @@ public class MainTeleOp extends LinearOpMode {
     public void initStates() {
         slideState = SLIDESTATE.zero;
         turretState = TURRETSTATE.center;
-        elbowState = ELBOWSTATE.up;
-        wristState = WRISTSTATE.straight;
+        wristState = WRISTSTATE.up;
+        twisterState = TWISTERSTATE.straight;
     }
 }
