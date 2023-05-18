@@ -61,8 +61,9 @@ public class MainTeleOp extends LinearOpMode {
     TURRETSTATE turretState;
     WRISTSTATE wristState;
     TWISTERSTATE twisterState;
+    ROBOTSTATE robotState;
 
-    int numOfGamepads = 1;
+    int numOfGamepads;
     @Override
     public void runOpMode() throws InterruptedException {
         Gamepad lastGamepad1 = new Gamepad();
@@ -78,6 +79,7 @@ public class MainTeleOp extends LinearOpMode {
         double turnTurretTime = -100;
         double timeSinceTurretTurn;
         double grabTime = -100;
+        double switchStateTime = -100;
         double timeSinceGrab;
 
         waitForStart();
@@ -90,6 +92,13 @@ public class MainTeleOp extends LinearOpMode {
             timeSinceSlideZero = totalTimer.seconds() - slideZeroTime;
             timeSinceTurretTurn = totalTimer.seconds() - turnTurretTime;
             timeSinceGrab = totalTimer.seconds() - grabTime;
+
+            switch (robotState) {
+                case intake: 
+                    if(!gamepad1.a && lastGamepad1.a) {
+
+                    }
+            }
 
             // slider control
             if(gamepad1.a) {
@@ -242,5 +251,6 @@ public class MainTeleOp extends LinearOpMode {
         turretState = TURRETSTATE.center;
         wristState = WRISTSTATE.up;
         twisterState = TWISTERSTATE.straight;
+        robotState = ROBOTSTATE.maneuvering;
     }
 }
