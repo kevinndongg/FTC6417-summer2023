@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Hardware6417 {
     DcMotorEx slider, auxSlider, frontLeft, frontRight, backLeft, backRight;
-    Servo turret, wrist, twister, grabber, parallelRetract;
+    Servo turret, wrist, twister, grabber, leftRetract, rightRetract;
 
     public Hardware6417(HardwareMap hwMap) {
         initSlides(hwMap);
@@ -45,10 +45,10 @@ public class Hardware6417 {
         wrist      = hwMap.get(Servo.class, "Wrist");
     }
 
-    /*public void initRetract(HardwareMap hwMap) {
-        parallelRetract = hwMap.get(Servo.class, "ParallelRetractor");
+    public void initRetract(HardwareMap hwMap) {
+        leftRetract = hwMap.get(Servo.class, "LeftRetract");
+        rightRetract = hwMap.get(Servo.class, "RightRetract");
     }
-*/
     public void autoTurret(double position) {
         if(turret.getPosition() != position) {
             turret.setPosition(position);
@@ -98,13 +98,21 @@ public class Hardware6417 {
         auxSlider.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public int getSliderPosition() {return slider.getCurrentPosition();}
+    public boolean sliderIntakeReady() {
+        return slider.getCurrentPosition() < Constants.sliderIntakeDelta;
+    }
 
     public boolean turretClear() {return slider.getCurrentPosition() > Constants.sliderTurretClearPos;}
 
     public void closeGrabber() {grabber.setPosition(Constants.grabberClosePos);}
     public void openGrabber() {grabber.setPosition(Constants.grabberOpenPos);}
 
-    public void retractOdo() {parallelRetract.setPosition(Constants.odoRetractPos);}
-    public void dropOdo() {parallelRetract.setPosition(Constants.odoDropPos);}
+    public void retractOdo() {
+        leftRetract.setPosition(Constants.leftOdoRetractPos);
+        rightRetract.setPosition(Constants.rightOdoRetractPos);
+    }
+    public void dropOdo() {
+        leftRetract.setPosition(Constants.leftOdoDropPos);
+        rightRetract.setPosition(Constants.rightOdoDropPos);
+    }
 }
