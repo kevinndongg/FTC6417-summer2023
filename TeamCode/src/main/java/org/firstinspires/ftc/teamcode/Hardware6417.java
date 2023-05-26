@@ -6,14 +6,18 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class Hardware6417 {
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+
+public class Hardware6417 extends SampleMecanumDrive {
     DcMotorEx slider, auxSlider, frontLeft, frontRight, backLeft, backRight;
     Servo turret, wrist, twister, grabber, leftRetract, rightRetract;
 
     public Hardware6417(HardwareMap hwMap) {
+        super(hwMap);
         initSlides(hwMap);
         initIntake(hwMap);
-        // initRetract(hwMap);
+        initRetract(hwMap);
     }
 
     public void initSlides(HardwareMap hwMap) {
@@ -41,8 +45,8 @@ public class Hardware6417 {
     public void initIntake(HardwareMap hwMap) {
         turret      = hwMap.get(Servo.class, "Turret");
         grabber     = hwMap.get(Servo.class, "Grabber");
-        twister = hwMap.get(Servo.class, "Twister");
-        wrist      = hwMap.get(Servo.class, "Wrist");
+        twister     = hwMap.get(Servo.class, "Twister");
+        wrist       = hwMap.get(Servo.class, "Wrist");
     }
 
     public void initRetract(HardwareMap hwMap) {
@@ -83,8 +87,6 @@ public class Hardware6417 {
     }
 
     public void resetSliders() {
-        if(slider.getCurrentPosition() > 30)
-            return;
         slider.setPower(0);
         auxSlider.setPower(0);
 
@@ -114,5 +116,14 @@ public class Hardware6417 {
     public void dropOdo() {
         leftRetract.setPosition(Constants.leftOdoDropPos);
         rightRetract.setPosition(Constants.rightOdoDropPos);
+    }
+
+    public double getCumulativeAngle() {
+        super.getEx
+    }
+
+    public void telemetry(Telemetry tele) {
+        tele.addData("slider position: ", slider.getCurrentPosition());
+        tele.addData("slider target pos: ", slider.getTargetPosition());
     }
 }
