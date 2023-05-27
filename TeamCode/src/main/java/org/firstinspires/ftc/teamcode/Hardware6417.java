@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -71,6 +73,10 @@ public class Hardware6417 extends SampleMecanumDrive {
         }
     }
 
+    public boolean slideOuttakeReady() {
+        return Math.abs(slider.getTargetPosition() - slider.getCurrentPosition()) < Constants.sliderOuttakeDelta;
+    }
+
     public void autoSlide(int position, double power) {
         if(slider.getCurrentPosition() != position) {
             slider.setTargetPosition(position);
@@ -118,8 +124,9 @@ public class Hardware6417 extends SampleMecanumDrive {
         rightRetract.setPosition(Constants.rightOdoDropPos);
     }
 
-    public double getCumulativeAngle() {
-        super.getEx
+    public void holonomicDrive(double vert, double horz, double rotate, double driveSpeed, double heading) {
+        Vector2d input = new Vector2d(vert, horz).rotated(-heading);
+        setWeightedDrivePower(new Pose2d(input.getX() * driveSpeed, input.getY() * driveSpeed, rotate * driveSpeed));
     }
 
     public void telemetry(Telemetry tele) {

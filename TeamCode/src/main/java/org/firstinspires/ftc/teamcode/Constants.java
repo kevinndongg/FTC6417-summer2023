@@ -9,7 +9,8 @@ public class Constants {
     /* servo variables */
     public static double driveSpeedIntake         = 0.5;
     public static double driveSpeedManeuvering    = 0.75;
-    public static double driveSpeedOuttake        = 0.35;
+    public static double driveSpeedOuttakeQueue   = 0.5;
+    public static double driveSpeedOuttakeReady   = 0.3;
     public static double driveSpeedConeRight      = 0.25;
 
     public static double slideHighPower           = 0.8;
@@ -48,6 +49,7 @@ public class Constants {
     public static int sliderHighPos               = 1115;
     public static int sliderDunkDelta             = 100;
     public static int sliderIntakeDelta           = 50;
+    public static int sliderOuttakeDelta          = 100;
     public static int sliderMaxPos                = 1350;
     public static int sliderMinPos                = 0;
     public static int coneClearDelta              = 180;
