@@ -125,7 +125,7 @@ public class Hardware6417 extends SampleMecanumDrive {
     }
 
     public void holonomicDrive(double vert, double horz, double rotate, double driveSpeed, double heading) {
-        Vector2d input = new Vector2d(vert, horz).rotated(-heading);
+        Vector2d input = new Vector2d(horz, vert).rotated(-heading - Math.toRadians(90));
         setWeightedDrivePower(new Pose2d(input.getX() * driveSpeed, input.getY() * driveSpeed, rotate * driveSpeed));
     }
 

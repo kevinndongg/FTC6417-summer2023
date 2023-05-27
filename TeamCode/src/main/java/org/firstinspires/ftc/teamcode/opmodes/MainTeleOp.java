@@ -111,7 +111,7 @@ public class MainTeleOp extends LinearOpMode {
 
         waitForStart();
 
-        headingOffset = robot.getRawExternalHeading();
+        headingOffset = robot.getRawExternalHeading() + Math.toRadians(180);
         totalTimer = new ElapsedTime();
 
         while(opModeIsActive()) {
@@ -189,22 +189,127 @@ public class MainTeleOp extends LinearOpMode {
                             turnTurretTime = totalTimer.seconds();
                         }
                         timeSinceTurretTurn = totalTimer.seconds() - turnTurretTime;
-                        if(timeSinceTurretTurn > Constants.wristTurretTurnDelay && robot.slideOuttakeReady()) {
-                            wristState = WRISTSTATE.down;
-                            setRobotState(ROBOTSTATE.outtakeReadyLow);
-                        }
                     } else if(currentGamepad1.left_trigger > 0.1) {
                         turretState = TURRETSTATE.left;
                         if(!(lastGamepad1.left_trigger > 0.1)) {
                             turnTurretTime = totalTimer.seconds();
                         }
                         timeSinceTurretTurn = totalTimer.seconds() - turnTurretTime;
-                        if(timeSinceTurretTurn > Constants.wristTurretTurnDelay) {
-                            wristState = WRISTSTATE.down;
-                            setRobotState(ROBOTSTATE.outtakeReadyLow);
-                        }
                     } else {
                         turretState = TURRETSTATE.center;
+                    }
+
+                    if(turretState != TURRETSTATE.center && timeSinceTurretTurn > Constants.wristTurretTurnDelay && robot.slideOuttakeReady()) {
+                        wristState = WRISTSTATE.down;
+                        setRobotState(ROBOTSTATE.outtakeReadyLow);
+                    }
+
+                    // OTHER SLIDE PRESETS
+                    if(currentGamepad1.x && !lastGamepad1.x) {
+                        setRobotState(ROBOTSTATE.outtakeQueueMedium);
+                    }
+                    if(currentGamepad1.y && !lastGamepad1.y) {
+                        setRobotState(ROBOTSTATE.outtakeQueueHigh);
+                    }
+                    if(currentGamepad1.a && !lastGamepad1.a) {
+                        setRobotState(ROBOTSTATE.maneuvering);
+                        slideZeroTime = totalTimer.seconds();
+                    }
+
+                    // toggle grabber
+                    if(currentGamepad1.left_bumper && !lastGamepad1.left_bumper) {
+                        grabbing = !grabbing;
+                    }
+
+                    // toggle wrist
+                    if(currentGamepad1.dpad_down && !lastGamepad1.dpad_down) {
+                        if(wristState == WRISTSTATE.up) {
+                            wristState = WRISTSTATE.down;
+                        } else {
+                            wristState = WRISTSTATE.up;
+                        }
+                    }
+                    break;
+                case outtakeQueueMedium:
+                    twisterState = TWISTERSTATE.center;
+                    slideState = SLIDESTATE.medium;
+                    driveSpeed = Constants.driveSpeedOuttakeQueue;
+                    // TURNING TURRET
+                    if(currentGamepad1.right_trigger > 0.1 && gamepad1.left_trigger > 0.1){
+                        turretState = TURRETSTATE.center;
+                    } else if(currentGamepad1.right_trigger > 0.1) {
+                        turretState = TURRETSTATE.right;
+                        if(!(lastGamepad1.right_trigger > 0.1)){
+                            turnTurretTime = totalTimer.seconds();
+                        }
+                        timeSinceTurretTurn = totalTimer.seconds() - turnTurretTime;
+                    } else if(currentGamepad1.left_trigger > 0.1) {
+                        turretState = TURRETSTATE.left;
+                        if(!(lastGamepad1.left_trigger > 0.1)) {
+                            turnTurretTime = totalTimer.seconds();
+                        }
+                        timeSinceTurretTurn = totalTimer.seconds() - turnTurretTime;
+                    } else {
+                        turretState = TURRETSTATE.center;
+                    }
+
+                    if(turretState != TURRETSTATE.center && timeSinceTurretTurn > Constants.wristTurretTurnDelay && robot.slideOuttakeReady()) {
+                        wristState = WRISTSTATE.down;
+                        setRobotState(ROBOTSTATE.outtakeReadyMedium);
+                    }
+
+                    // OTHER SLIDE PRESETS
+                    if(currentGamepad1.b && !lastGamepad1.b) {
+                        setRobotState(ROBOTSTATE.outtakeQueueLow);
+                    }
+                    if(currentGamepad1.y && !lastGamepad1.y) {
+                        setRobotState(ROBOTSTATE.outtakeQueueHigh);
+                    }
+                    if(currentGamepad1.a && !lastGamepad1.a) {
+                        setRobotState(ROBOTSTATE.maneuvering);
+                        slideZeroTime = totalTimer.seconds();
+                    }
+
+                    // toggle grabber
+                    if(currentGamepad1.left_bumper && !lastGamepad1.left_bumper) {
+                        grabbing = !grabbing;
+                    }
+
+                    // toggle wrist
+                    if(currentGamepad1.dpad_down && !lastGamepad1.dpad_down) {
+                        if(wristState == WRISTSTATE.up) {
+                            wristState = WRISTSTATE.down;
+                        } else {
+                            wristState = WRISTSTATE.up;
+                        }
+                    }
+                    break;
+                case outtakeQueueHigh:
+                    twisterState = TWISTERSTATE.center;
+                    slideState = SLIDESTATE.high;
+                    driveSpeed = Constants.driveSpeedOuttakeQueue;
+                    // TURNING TURRET
+                    if(currentGamepad1.right_trigger > 0.1 && gamepad1.left_trigger > 0.1){
+                        turretState = TURRETSTATE.center;
+                    } else if(currentGamepad1.right_trigger > 0.1) {
+                        turretState = TURRETSTATE.right;
+                        if(!(lastGamepad1.right_trigger > 0.1)){
+                            turnTurretTime = totalTimer.seconds();
+                        }
+                        timeSinceTurretTurn = totalTimer.seconds() - turnTurretTime;
+                    } else if(currentGamepad1.left_trigger > 0.1) {
+                        turretState = TURRETSTATE.left;
+                        if(!(lastGamepad1.left_trigger > 0.1)) {
+                            turnTurretTime = totalTimer.seconds();
+                        }
+                        timeSinceTurretTurn = totalTimer.seconds() - turnTurretTime;
+                    } else {
+                        turretState = TURRETSTATE.center;
+                    }
+
+                    if(turretState != TURRETSTATE.center && timeSinceTurretTurn > Constants.wristTurretTurnDelay && robot.slideOuttakeReady()) {
+                        wristState = WRISTSTATE.down;
+                        setRobotState(ROBOTSTATE.outtakeReadyHigh);
                     }
 
                     // OTHER SLIDE PRESETS
@@ -213,9 +318,6 @@ public class MainTeleOp extends LinearOpMode {
                     }
                     if(currentGamepad1.x && !lastGamepad1.x) {
                         setRobotState(ROBOTSTATE.outtakeQueueMedium);
-                    }
-                    if(currentGamepad1.y && !lastGamepad1.y) {
-                        setRobotState(ROBOTSTATE.outtakeQueueHigh);
                     }
                     if(currentGamepad1.a && !lastGamepad1.a) {
                         setRobotState(ROBOTSTATE.maneuvering);
@@ -257,14 +359,109 @@ public class MainTeleOp extends LinearOpMode {
                         setRobotState(ROBOTSTATE.maneuvering);
                         slideZeroTime = totalTimer.seconds();
                     }
-                    if(currentGamepad1.b && !lastGamepad1.b) {
-                        setRobotState(ROBOTSTATE.outtakeQueueLow);
-                    }
                     if(currentGamepad1.x && !lastGamepad1.x) {
                         setRobotState(ROBOTSTATE.outtakeQueueMedium);
                     }
                     if(currentGamepad1.y && !lastGamepad1.y) {
                         setRobotState(ROBOTSTATE.outtakeQueueHigh);
+                    }
+
+                    // dunk slides
+                    if(currentGamepad1.right_bumper) {
+                        dunk = Constants.sliderDunkDelta;
+                    } else {
+                        dunk = 0;
+                    }
+
+                    // toggle grabber
+                    if(currentGamepad1.left_bumper && !lastGamepad1.left_bumper) {
+                        grabbing = !grabbing;
+                    }
+
+                    // toggle wrist
+                    if(currentGamepad1.dpad_down && !lastGamepad1.dpad_down) {
+                        if(wristState == WRISTSTATE.up) {
+                            wristState = WRISTSTATE.down;
+                        } else {
+                            wristState = WRISTSTATE.up;
+                        }
+                    }
+                    break;
+                case outtakeReadyMedium:
+                    twisterState = TWISTERSTATE.center;
+                    slideState = SLIDESTATE.medium;
+                    driveSpeed = Constants.driveSpeedOuttakeReady;
+
+                    if(currentGamepad1.left_trigger > 0.1 && currentGamepad1.right_trigger > 0.1) {
+                        wristState = WRISTSTATE.up;
+                        setRobotState(ROBOTSTATE.outtakeQueueMedium);
+                    } else if(currentGamepad1.left_trigger > 0.1) {
+                        turretState = TURRETSTATE.left;
+                    } else if(currentGamepad1.right_trigger > 0.1) {
+                        turretState = TURRETSTATE.right;
+                    } else {
+                        wristState = WRISTSTATE.up;
+                        setRobotState(ROBOTSTATE.outtakeQueueMedium);
+                    }
+
+                    if(currentGamepad1.a && !lastGamepad1.a) {
+                        setRobotState(ROBOTSTATE.maneuvering);
+                        slideZeroTime = totalTimer.seconds();
+                    }
+                    if(currentGamepad1.b && !lastGamepad1.b) {
+                        setRobotState(ROBOTSTATE.outtakeQueueLow);
+                    }
+                    if(currentGamepad1.y && !lastGamepad1.y) {
+                        setRobotState(ROBOTSTATE.outtakeQueueHigh);
+                    }
+
+                    // dunk slides
+                    if(currentGamepad1.right_bumper) {
+                        dunk = Constants.sliderDunkDelta;
+                    } else {
+                        dunk = 0;
+                    }
+
+                    // toggle grabber
+                    if(currentGamepad1.left_bumper && !lastGamepad1.left_bumper) {
+                        grabbing = !grabbing;
+                    }
+
+                    // toggle wrist
+                    if(currentGamepad1.dpad_down && !lastGamepad1.dpad_down) {
+                        if(wristState == WRISTSTATE.up) {
+                            wristState = WRISTSTATE.down;
+                        } else {
+                            wristState = WRISTSTATE.up;
+                        }
+                    }
+                    break;
+                case outtakeReadyHigh:
+                    twisterState = TWISTERSTATE.center;
+                    slideState = SLIDESTATE.high;
+                    driveSpeed = Constants.driveSpeedOuttakeReady;
+
+                    if(currentGamepad1.left_trigger > 0.1 && currentGamepad1.right_trigger > 0.1) {
+                        wristState = WRISTSTATE.up;
+                        setRobotState(ROBOTSTATE.outtakeQueueHigh);
+                    } else if(currentGamepad1.left_trigger > 0.1) {
+                        turretState = TURRETSTATE.left;
+                    } else if(currentGamepad1.right_trigger > 0.1) {
+                        turretState = TURRETSTATE.right;
+                    } else {
+                        wristState = WRISTSTATE.up;
+                        setRobotState(ROBOTSTATE.outtakeQueueHigh);
+                    }
+
+                    if(currentGamepad1.a && !lastGamepad1.a) {
+                        setRobotState(ROBOTSTATE.maneuvering);
+                        slideZeroTime = totalTimer.seconds();
+                    }
+                    if(currentGamepad1.b && !lastGamepad1.b) {
+                        setRobotState(ROBOTSTATE.outtakeQueueLow);
+                    }
+                    if(currentGamepad1.x && !lastGamepad1.x) {
+                        setRobotState(ROBOTSTATE.outtakeQueueMedium);
                     }
 
                     // dunk slides
@@ -314,16 +511,20 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             // driving
-            if(currentGamepad1.right_bumper && !lastGamepad1.right_bumper) {
-                headingOffset = robot.getRawExternalHeading();
+            if(currentGamepad1.right_stick_button && !lastGamepad1.right_stick_button) {
+                headingOffset = robot.getExternalHeading();
             }
 
             vertControl = Math.pow(-gamepad1.left_stick_y, 3);
             horzControl = Math.pow(gamepad1.left_stick_x, 3);
-            rotateControl = Math.pow(gamepad1.right_stick_x, 3);
-            heading = robot.getRawExternalHeading();
+            rotateControl = Math.pow(-gamepad1.right_stick_x, 3);
+            heading = robot.getExternalHeading();
 
-            robot.holonomicDrive(vertControl, horzControl, rotateControl, driveSpeed, heading-headingOffset);
+            if(Math.max(Math.abs(vertControl), Math.max(Math.abs(horzControl), Math.abs(rotateControl))) > 0.1) {
+                robot.holonomicDrive(vertControl, horzControl, rotateControl, driveSpeed, heading - headingOffset);
+            } else {
+                robot.holonomicDrive(0,0,0,0,0);
+            }
 
             // slider control
             switch (slideState) {
@@ -381,10 +582,18 @@ public class MainTeleOp extends LinearOpMode {
                     robot.autoTurret(Constants.turretCenterPos);
                     break;
                 case left:
-                    robot.autoTurret(Constants.turretLeftPos);
+                    if(robot.turretClear()) {
+                        robot.autoTurret(Constants.turretLeftPos);
+                    } else {
+                        robot.autoTurret(Constants.turretCenterPos);
+                    }
                     break;
                 case right:
-                    robot.autoTurret(Constants.turretRightPos);
+                    if(robot.turretClear()) {
+                        robot.autoTurret(Constants.turretRightPos);
+                    } else {
+                        robot.autoTurret(Constants.turretCenterPos);
+                    }
                     break;
             }
 

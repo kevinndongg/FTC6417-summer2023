@@ -49,7 +49,7 @@ public class Constants {
     public static int sliderHighPos               = 1115;
     public static int sliderDunkDelta             = 100;
     public static int sliderIntakeDelta           = 50;
-    public static int sliderOuttakeDelta          = 100;
+    public static int sliderOuttakeDelta          = 150;
     public static int sliderMaxPos                = 1350;
     public static int sliderMinPos                = 0;
     public static int coneClearDelta              = 180;
@@ -59,5 +59,5 @@ public class Constants {
     public static double slideDownDelay           = 0.15;
     public static double slideStallDelay          = 3;
     public static double wristGrabDelay           = 0.3;
-    public static double wristTurretTurnDelay     = 0.5;
+    public static double wristTurretTurnDelay     = 0.35;
 }
