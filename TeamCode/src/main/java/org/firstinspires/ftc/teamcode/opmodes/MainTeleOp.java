@@ -267,22 +267,13 @@ public class MainTeleOp extends LinearOpMode {
                     slideState = SLIDESTATE.low;
                     driveSpeed = Constants.driveSpeedOuttakeReady;
 
-                    if(currentGamepad1.left_trigger > 0.1 && currentGamepad1.right_trigger > 0.1) {
-                        wristState = WRISTSTATE.up;
-                        setRobotState(ROBOTSTATE.outtakeQueueLow);
-                    } else if(currentGamepad1.left_trigger > 0.1) {
-                        turretState = TURRETSTATE.left;
-                    } else if(currentGamepad1.right_trigger > 0.1) {
-                        turretState = TURRETSTATE.right;
-                    } else {
-                        wristState = WRISTSTATE.up;
-                        setRobotState(ROBOTSTATE.outtakeQueueLow);
-                    }
+                    processOuttakeReadyStates(ROBOTSTATE.outtakeQueueLow);
 
                     if(currentGamepad1.a && !lastGamepad1.a) {
                         setRobotState(ROBOTSTATE.maneuvering);
                         slideZeroTime = totalTimer.seconds();
                     }
+
                     if(currentGamepad1.x && !lastGamepad1.x) {
                         setRobotState(ROBOTSTATE.outtakeQueueMedium);
                     }
@@ -312,17 +303,7 @@ public class MainTeleOp extends LinearOpMode {
                     slideState = SLIDESTATE.medium;
                     driveSpeed = Constants.driveSpeedOuttakeReady;
 
-                    if(currentGamepad1.left_trigger > 0.1 && currentGamepad1.right_trigger > 0.1) {
-                        wristState = WRISTSTATE.up;
-                        setRobotState(ROBOTSTATE.outtakeQueueMedium);
-                    } else if(currentGamepad1.left_trigger > 0.1) {
-                        turretState = TURRETSTATE.left;
-                    } else if(currentGamepad1.right_trigger > 0.1) {
-                        turretState = TURRETSTATE.right;
-                    } else {
-                        wristState = WRISTSTATE.up;
-                        setRobotState(ROBOTSTATE.outtakeQueueMedium);
-                    }
+                    processOuttakeReadyStates(ROBOTSTATE.outtakeQueueMedium);
 
                     if(currentGamepad1.a && !lastGamepad1.a) {
                         setRobotState(ROBOTSTATE.maneuvering);
@@ -357,17 +338,7 @@ public class MainTeleOp extends LinearOpMode {
                     slideState = SLIDESTATE.high;
                     driveSpeed = Constants.driveSpeedOuttakeReady;
 
-                    if(currentGamepad1.left_trigger > 0.1 && currentGamepad1.right_trigger > 0.1) {
-                        wristState = WRISTSTATE.up;
-                        setRobotState(ROBOTSTATE.outtakeQueueHigh);
-                    } else if(currentGamepad1.left_trigger > 0.1) {
-                        turretState = TURRETSTATE.left;
-                    } else if(currentGamepad1.right_trigger > 0.1) {
-                        turretState = TURRETSTATE.right;
-                    } else {
-                        wristState = WRISTSTATE.up;
-                        setRobotState(ROBOTSTATE.outtakeQueueHigh);
-                    }
+                    processOuttakeReadyStates(ROBOTSTATE.outtakeQueueHigh);
 
                     if(currentGamepad1.a && !lastGamepad1.a) {
                         setRobotState(ROBOTSTATE.maneuvering);
@@ -584,6 +555,20 @@ public class MainTeleOp extends LinearOpMode {
         return turretState != TURRETSTATE.center &&
                 timeSinceTurretTurn > Constants.wristTurretTurnDelay &&
                 robot.slideOuttakeReady();
+    }
+
+    public void processOuttakeReadyStates(ROBOTSTATE outtakeQueue) {
+        if(currentGamepad1.left_trigger > 0.1 && currentGamepad1.right_trigger > 0.1) {
+            wristState = WRISTSTATE.up;
+            setRobotState(outtakeQueue);
+        } else if(currentGamepad1.left_trigger > 0.1) {
+            turretState = TURRETSTATE.left;
+        } else if(currentGamepad1.right_trigger > 0.1) {
+            turretState = TURRETSTATE.right;
+        } else {
+            wristState = WRISTSTATE.up;
+            setRobotState(outtakeQueue);
+        }
     }
 
     public void toggleWrist() {
