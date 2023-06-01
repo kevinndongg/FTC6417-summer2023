@@ -12,8 +12,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 public class Hardware6417 extends SampleMecanumDrive {
-    DcMotorEx slider, auxSlider, frontLeft, frontRight, backLeft, backRight;
-    Servo turret, wrist, twister, grabber, leftRetract, rightRetract;
+    public DcMotorEx slider, auxSlider, frontLeft, frontRight, backLeft, backRight;
+    public Servo turret, wrist, twister, grabber, leftRetract, rightRetract;
 
     public Hardware6417(HardwareMap hwMap) {
         super(hwMap);

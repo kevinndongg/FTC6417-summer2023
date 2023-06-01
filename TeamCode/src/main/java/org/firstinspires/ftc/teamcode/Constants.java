@@ -19,7 +19,7 @@ public class Constants {
     public static double slideBasePower           = 0.8;
     public static double slideDropConePower       = 0.3;
 
-    public static double grabberClosePos          = 0.98;
+    public static double grabberClosePos          = 0.97;
     public static double grabberOpenPos           = 0.8;
 
     public static double wristUpPos               = 0.05;
