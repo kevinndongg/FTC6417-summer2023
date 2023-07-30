@@ -28,27 +28,16 @@ options : cone righting + snail drive
 public class MainTeleOp extends LinearOpMode {
     Hardware6417 robot;
     enum SLIDESTATE {
-        zero,
-        low,
-        medium,
-        high,
-        coneRight,
-        manual
+        zero, low, medium, high, coneRight, manual
     }
     enum TURRETSTATE {
-        center,
-        right,
-        left,
+        center, right, left,
     }
     enum WRISTSTATE {
-        down,
-        up,
-        coneRight
+        down, up, coneRight
     }
     enum TWISTERSTATE {
-        right,
-        left,
-        center
+        right, left, center
     }
     enum ROBOTSTATE{
         intake,
@@ -66,13 +55,9 @@ public class MainTeleOp extends LinearOpMode {
     TURRETSTATE turretState;
     WRISTSTATE wristState;
     TWISTERSTATE twisterState;
-    ROBOTSTATE robotState;
-    ROBOTSTATE lastRobotState;
+    ROBOTSTATE robotState, lastRobotState;
 
-    Gamepad currentGamepad1;
-    Gamepad currentGamepad2;
-    Gamepad lastGamepad1;
-    Gamepad lastGamepad2;
+    Gamepad currentGamepad1, currentGamepad2, lastGamepad1, lastGamepad2;
 
     double slideZeroTime;
     double turnTurretTime;
