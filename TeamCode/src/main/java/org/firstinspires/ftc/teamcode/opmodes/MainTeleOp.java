@@ -518,7 +518,7 @@ public class MainTeleOp extends LinearOpMode {
 
     public void processOuttakeQueueTurret() {
         if(currentGamepad1.right_trigger > 0.1 && gamepad1.left_trigger > 0.1){
-            turretState = TURRETSTATE.center;
+            turretState = TURRETSTATE.center;        // if both triggers pressed, center turret
         } else if(currentGamepad1.right_trigger > 0.1) {
             turretState = TURRETSTATE.right;
             if(!(lastGamepad1.right_trigger > 0.1)){
