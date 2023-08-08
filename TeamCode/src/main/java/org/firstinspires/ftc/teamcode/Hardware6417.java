@@ -10,10 +10,20 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 public class Hardware6417 extends SampleMecanumDrive {
     public DcMotorEx slider, auxSlider, frontLeft, frontRight, backLeft, backRight;
     public Servo turret, wrist, twister, grabber, leftRetract, rightRetract;
+    double[] subMatCenter = {0.55,0.5}; //NOT coordinates, these values are the % across the screen,.5 being the exact center, x,y from top left
+    int subMatWidth = 80;
+    int subMatHeight = 120;
+
+    static final int CAMERA_WIDTH = 640;
+    static final int CAMERA_HEIGHT = 360;
+
+
+
 
     public Hardware6417(HardwareMap hwMap) {
         super(hwMap);
