@@ -84,6 +84,8 @@ public class EOCVTest extends LinearOpMode {
                  * away from the user.
                  */
                 webcam.startStreaming(640, 360, OpenCvCameraRotation.UPRIGHT);
+                telemetry.addData("Stream", "started");
+                telemetry.update();
             }
 
             @Override
@@ -92,6 +94,7 @@ public class EOCVTest extends LinearOpMode {
             }
         });
 
+        waitForStart();
         while(opModeIsActive()) {
             ArrayList<AprilTagDetection> detections = pipeline.getLatestDetections();
 
@@ -101,7 +104,9 @@ public class EOCVTest extends LinearOpMode {
             }
 
             telemetry.addData("detections", detections.size());
-            telemetry.addData("detection ids", tagIds);
+            if(tagIds.length > 0) {
+                telemetry.addData("tag id", tagIds[0]);
+            }
             telemetry.addData("tagsize", tagsize);
             telemetry.addData("fx", fx);
             telemetry.addData("fy", fy);
@@ -110,6 +115,8 @@ public class EOCVTest extends LinearOpMode {
             telemetry.addData("tagX", tagX);
             telemetry.addData("tagY", tagY);
             telemetry.update();
+
+            sleep(200);
         }
     }
 }
