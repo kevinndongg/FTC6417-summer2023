@@ -33,15 +33,14 @@ import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
-import org.openftc.easyopencv.OpenCvInternalCamera2;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.ArrayList;
 
 @TeleOp(name = "AprilTagDemo", group = "TeleOp")
 public class AprilTagDemo extends LinearOpMode
 {
-    OpenCvCamera camera;
+    OpenCvCamera webcam;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     static final double FEET_PER_METER = 3.28084;
@@ -69,16 +68,16 @@ public class AprilTagDemo extends LinearOpMode
     public void runOpMode()
     {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "webcam"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
-        camera.setPipeline(aprilTagDetectionPipeline);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        webcam.setPipeline(aprilTagDetectionPipeline);
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
             public void onOpened()
             {
-                camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(640,360, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -101,9 +100,9 @@ public class AprilTagDemo extends LinearOpMode
 
             // If there's been a new frame...
             if (detections != null) {
-                telemetry.addData("FPS", camera.getFps());
-                telemetry.addData("Overhead ms", camera.getOverheadTimeMs());
-                telemetry.addData("Pipeline ms", camera.getPipelineTimeMs());
+                telemetry.addData("FPS", webcam.getFps());
+                telemetry.addData("Overhead ms", webcam.getOverheadTimeMs());
+                telemetry.addData("Pipeline ms", webcam.getPipelineTimeMs());
 
                 // If we don't see any tags
                 if (detections.size() == 0) {
